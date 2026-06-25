@@ -1,6 +1,6 @@
 # OmegaPoint
 
-Toy project to try out a locally-running LLM. This uses the llm_qwen3_text_gen workflow running via ComfyUI as a local server.
+Toy project to try out a locally-running LLM. This uses the llm_qwen3_text_gen workflow running via ComfyUI as a local server (the server address and json filename of the API-exported workflow can be updated in ChatBot's __init__ function if needed).
 
 The ChatBot class provides an interface that just requires a prompt to be given to the method get_query().
 
