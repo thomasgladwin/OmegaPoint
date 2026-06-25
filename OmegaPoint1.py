@@ -23,7 +23,8 @@ I have a visual impairment.
 I like Pepsi. I am politically on the right.
 I have no disabilities.
 """
-max_iterations = 5
+min_iterations = 2
+max_iterations = 4
 
-O = OmegaPoint.OmegaPoint(role_user, aim, information, max_iterations)
+O = OmegaPoint.OmegaPoint(role_user, aim, information, min_iterations, max_iterations)
 output, History = O.run()
