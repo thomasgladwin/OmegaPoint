@@ -25,6 +25,7 @@ I have no disabilities.
 """
 min_iterations = 2
 max_iterations = 4
+neg_pos_balance = 0.25 # Higher focuses on positives, lower (to 0) focuses on criticism
 
 O = OmegaPoint.OmegaPoint(role_user, aim, information, min_iterations, max_iterations)
 output, History = O.run()
