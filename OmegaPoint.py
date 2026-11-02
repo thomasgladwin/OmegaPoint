@@ -27,6 +27,7 @@ class OmegaPoint():
             Use the following information to help you achieve your aim: {self.information}
         """
 
+        prev_score = -1
         for n in range(self.max_iterations):
             print(f"Iteration {n} of {self.max_iterations}")
             actor = ChatBot.ChatBot()
@@ -44,7 +45,8 @@ class OmegaPoint():
             for neg_pos in range(2):
                 if neg_pos == 0:
                     critic_instructions = f"""
-                        Evaluate the following response relative to the following context. Focus on what was bad about the response, on anything information it failed to use, or where it did not fit the role or aims.
+                        Evaluate the following response specifically nad exclusive  relative to the following context; do not apply any other considerations. 
+                        Focus on what was misaligned about the response, on any information it failed to use, or where it did not fit the role or aims.
                         The user must succeed in their role described between ###ROLE### and ###ENDROLE### as ###ROLE###:{self.role_user} ###ENDROLE### - consider what attributes the output should have to optimize that outcome. 
                         The response must achieve the aims described between ###AIM### and ###ENDAIM### as ###AIM###: {self.aim} ###ENDAIM###.
                         The response must follow the information between ###INFO### and ###ENDINFO### as ###INFO###: {self.information} ###ENDINFO###.
@@ -52,7 +54,8 @@ class OmegaPoint():
                     """
                 else:
                     critic_instructions = f"""
-                        Evaluate the following response relative to the following context. Focus on what was good about the response, on anything information it creatively used and elaborated on, or where it clearly reflected the role or aims.
+                        Evaluate the following response specifically nad exclusive relative to the following context; do not apply any other considerations. 
+                        Focus on what was aligned about the response, on any information it creatively used and elaborated on, or where it clearly reflected the role or aims.
                         The user must succeed in their role described between ###ROLE### and ###ENDROLE### as ###ROLE###:{self.role_user} ###ENDROLE### - consider what attributes the output should have to optimize that outcome. 
                         The response must achieve the aims described between ###AIM### and ###ENDAIM### as ###AIM###: {self.aim} ###ENDAIM###.
                         The response must follow the information between ###INFO### and ###ENDINFO### as ###INFO###: {self.information} ###ENDINFO###.
@@ -104,7 +107,7 @@ class OmegaPoint():
                     if n >= self.min_iterations:
                         break
 
-            if score > 0:
+            if score > 0 and score > prev_score:
                 adjusterinstructions = f"""
                     Create a new LLM prompt as specified below. Ensure the prompt remains suitable for:
                     the role (specified between ###ROLE### and ###ROLEEND###) of ###ROLE### {self.role_user} ###ROLEEND### and the aim (specified between ###AIM### and ###AIMEND###) of ###AIM### {self.aim} ###AIMEND###.
@@ -120,6 +123,8 @@ class OmegaPoint():
                 if self.verbose:
                     print("\n###\n### Adjuster\n###\n")
                     print("\n".join(textwrap.wrap(response)))
+
+            prev_score = score
 
         # Get best output
         best_score = self.scores[0]
